@@ -74,13 +74,10 @@ if (isset($_GET["signup"]) && $_GET["signup"] === "success") {
             <div class="space-x-8">
             <?php 
           
-          if (isset($_SESSION["username"])) {
-            echo '<a
-            href="./admin.php"
-            class="text-lg hover:text-indigo-200 transition-colors"
-            >Admin</a
-          >';
+          if (isset($_SESSION["username"]) && $_SESSION["username"] == "admin") {
+            echo '<a href="./admin.php" class="text-lg hover:text-indigo-200 transition-colors">Admin</a>';
         }
+        
         ?>
               <a
                 href="./index.php"

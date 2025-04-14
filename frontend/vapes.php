@@ -16,7 +16,7 @@
       <div class="space-x-6">
       <?php 
           session_start();
-          if (isset($_SESSION["username"])) {
+          if (isset($_SESSION["username"]) && $_SESSION["username"] === "admin") {
             echo '<a
             href="./admin.php"
             class="text-lg hover:text-indigo-200 transition-colors"
