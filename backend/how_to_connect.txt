@@ -1,0 +1,15 @@
+--mysql -u admin -p
+
+Enter password: admin
+
+--USE `e-commerce`;
+
+
+and enjoy !
+
+
+how to create a new database : 
+1-- CREATE DATABASE your_database_name;
+2-- SHOW DATABASES;
+3-- USE your_database_name;
+// the if you want create tables ect ...

@@ -1,0 +1,21 @@
+/* Add this inside a <style> tag or your CSS file */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: rgb(75, 78, 84); /* Indigo to Blue */
+    border-radius: 10px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(72, 74, 78); /* darker on hover */
+    cursor : pointer ; 
+  }
+  
