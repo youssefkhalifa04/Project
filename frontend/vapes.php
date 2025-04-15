@@ -39,6 +39,20 @@
           } else {
             echo '<a href="./login.php" class="hover:text-indigo-300">Login</a>';
           }
+
+         
+         
+          require_once '../backend/dbh.inc.php'; // This gives you $pdo
+
+          try {
+              $sql = "SELECT * FROM products";
+              $stmt = $pdo->prepare($sql); // use $pdo here
+              $stmt->execute();
+              $products = $stmt->fetchAll(PDO::FETCH_ASSOC); // PDO fetch
+          } catch (PDOException $e) {
+              die("Query failed: " . $e->getMessage());
+          }
+
         ?>
       </div>
     </div>
@@ -55,89 +69,25 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
       
       <!-- Sample Product Card -->
-      <div class="bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-        <img src="./assets/vape1.jpg" alt="Vape" class="h-64 w-full object-cover">
-        <div class="p-5">
-          <h3 class="text-xl font-semibold text-white mb-1">VaporWave</h3>
-          <p class="text-gray-400 text-sm mb-3">Smooth, refreshing flavor that relaxes the senses.</p>
-          <p class="text-indigo-400 font-bold mb-3">$14.99</p>
-          <a href="#" class="inline-block bg-indigo-600 text-white px-4 py-2 rounded-full hover:bg-indigo-500 transition-colors">Buy Now</a>
-        </div>
-      </div>
+      <?php foreach ($products as $product): ?>
+  <div class="bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+    <img src="<?php echo htmlspecialchars($product['image']); ?>" alt="Vape" class="h-64 w-full object-cover">
+    <div class="p-5">
+      <h3 class="text-xl font-semibold text-white mb-1"><?php echo htmlspecialchars($product['name']); ?></h3>
+      <p class="text-gray-400 text-sm mb-3"><?php echo htmlspecialchars($product['description']); ?></p>
+      <p class="text-indigo-400 font-bold mb-3">$<?php echo htmlspecialchars($product['price']); ?></p>
+      <form action="../backend/addtocart.inc.php" method="POST">
+  <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
+  <input type="hidden" name="quantity" value="1">
+  <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-500 transition">
+    Buy Now
+  </button>
+</form>
 
-      <!-- Example duplicate -->
-      <div class="bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-        <img src="./assets/vape2.jpg" alt="Vape" class="h-64 w-full object-cover">
-        <div class="p-5">
-          <h3 class="text-xl font-semibold text-white mb-1">CloudNine</h3>
-          <p class="text-gray-400 text-sm mb-3">Tropical fruit fusion for a vibrant puff.</p>
-          <p class="text-indigo-400 font-bold mb-3">$15.49</p>
-          <a href="#" class="inline-block bg-indigo-600 text-white px-4 py-2 rounded-full hover:bg-indigo-500 transition-colors">Buy Now</a>
-        </div>
-      </div>
-      <div class="bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-        <img src="./assets/vape2.jpg" alt="Vape" class="h-64 w-full object-cover">
-        <div class="p-5">
-          <h3 class="text-xl font-semibold text-white mb-1">CloudNine</h3>
-          <p class="text-gray-400 text-sm mb-3">Tropical fruit fusion for a vibrant puff.</p>
-          <p class="text-indigo-400 font-bold mb-3">$15.49</p>
-          <a href="#" class="inline-block bg-indigo-600 text-white px-4 py-2 rounded-full hover:bg-indigo-500 transition-colors">Buy Now</a>
-        </div>
-      </div>
-      <div class="bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-        <img src="./assets/vape2.jpg" alt="Vape" class="h-64 w-full object-cover">
-        <div class="p-5">
-          <h3 class="text-xl font-semibold text-white mb-1">CloudNine</h3>
-          <p class="text-gray-400 text-sm mb-3">Tropical fruit fusion for a vibrant puff.</p>
-          <p class="text-indigo-400 font-bold mb-3">$15.49</p>
-          <a href="#" class="inline-block bg-indigo-600 text-white px-4 py-2 rounded-full hover:bg-indigo-500 transition-colors">Buy Now</a>
-        </div>
-      </div>
-      <div class="bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-        <img src="./assets/vape2.jpg" alt="Vape" class="h-64 w-full object-cover">
-        <div class="p-5">
-          <h3 class="text-xl font-semibold text-white mb-1">CloudNine</h3>
-          <p class="text-gray-400 text-sm mb-3">Tropical fruit fusion for a vibrant puff.</p>
-          <p class="text-indigo-400 font-bold mb-3">$15.49</p>
-          <a href="#" class="inline-block bg-indigo-600 text-white px-4 py-2 rounded-full hover:bg-indigo-500 transition-colors">Buy Now</a>
-        </div>
-      </div>
-      <div class="bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-        <img src="./assets/vape2.jpg" alt="Vape" class="h-64 w-full object-cover">
-        <div class="p-5">
-          <h3 class="text-xl font-semibold text-white mb-1">CloudNine</h3>
-          <p class="text-gray-400 text-sm mb-3">Tropical fruit fusion for a vibrant puff.</p>
-          <p class="text-indigo-400 font-bold mb-3">$15.49</p>
-          <a href="#" class="inline-block bg-indigo-600 text-white px-4 py-2 rounded-full hover:bg-indigo-500 transition-colors">Buy Now</a>
-        </div>
-      </div>
-      <div class="bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-        <img src="./assets/vape2.jpg" alt="Vape" class="h-64 w-full object-cover">
-        <div class="p-5">
-          <h3 class="text-xl font-semibold text-white mb-1">CloudNine</h3>
-          <p class="text-gray-400 text-sm mb-3">Tropical fruit fusion for a vibrant puff.</p>
-          <p class="text-indigo-400 font-bold mb-3">$15.49</p>
-          <a href="#" class="inline-block bg-indigo-600 text-white px-4 py-2 rounded-full hover:bg-indigo-500 transition-colors">Buy Now</a>
-        </div>
-      </div>
-      <div class="bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-        <img src="./assets/vape2.jpg" alt="Vape" class="h-64 w-full object-cover">
-        <div class="p-5">
-          <h3 class="text-xl font-semibold text-white mb-1">CloudNine</h3>
-          <p class="text-gray-400 text-sm mb-3">Tropical fruit fusion for a vibrant puff.</p>
-          <p class="text-indigo-400 font-bold mb-3">$15.49</p>
-          <a href="#" class="inline-block bg-indigo-600 text-white px-4 py-2 rounded-full hover:bg-indigo-500 transition-colors">Buy Now</a>
-        </div>
-      </div>
-      <div class="bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-        <img src="./assets/vape2.jpg" alt="Vape" class="h-64 w-full object-cover">
-        <div class="p-5">
-          <h3 class="text-xl font-semibold text-white mb-1">CloudNine</h3>
-          <p class="text-gray-400 text-sm mb-3">Tropical fruit fusion for a vibrant puff.</p>
-          <p class="text-indigo-400 font-bold mb-3">$15.49</p>
-          <a href="#" class="inline-block bg-indigo-600 text-white px-4 py-2 rounded-full hover:bg-indigo-500 transition-colors">Buy Now</a>
-        </div>
-      </div>
+    </div>
+  </div>
+<?php endforeach; ?>
+
 
     </div>
   </main>

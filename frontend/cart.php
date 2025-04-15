@@ -1,11 +1,36 @@
 <?php
 session_start();
+require_once '../backend/dbh.inc.php';
 
-// Dummy cart items for demonstration
-$cart = $_SESSION['cart'] ?? [
-    ['id' => 1, 'name' => 'Sample Product', 'price' => 19.99, 'quantity' => 2, 'image' => 'https://via.placeholder.com/150'],
-    ['id' => 2, 'name' => 'Another Product', 'price' => 39.99, 'quantity' => 1, 'image' => 'https://via.placeholder.com/150']
-];
+$userId = $_SESSION['user_id'] ?? null;
+
+
+
+try {
+    // First, get the user's cart ID
+    $sql = "SELECT user_id FROM cart WHERE user_id = ?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$userId]);
+    $cartRow = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$cartRow) {
+        $cartItems = []; // No cart yet
+    } else {
+        $cartId = $cartRow['user_id'];
+
+        // Get items in the cart with product details
+        $sql = "SELECT ci.id, p.name, p.price, p.image, ci.quantity
+                FROM cart_items ci
+                JOIN products p ON ci.product_id = p.id
+                WHERE ci.cart_id = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$cartId]);
+        $cartItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+} catch (PDOException $e) {
+    die("Query failed: " . $e->getMessage());
+}
+
 $total = 0;
 ?>
 
@@ -21,11 +46,11 @@ $total = 0;
   <div class="container mx-auto px-4 py-8">
     <h1 class="text-3xl font-bold mb-6 text-center">🛒 Your Cart</h1>
 
-    <?php if (empty($cart)): ?>
+    <?php if (empty($cartItems)): ?>
       <p class="text-center text-gray-400">Your cart is empty.</p>
     <?php else: ?>
       <div class="space-y-6">
-        <?php foreach ($cart as $item): 
+        <?php foreach ($cartItems as $item): 
           $itemTotal = $item['price'] * $item['quantity'];
           $total += $itemTotal;
         ?>
