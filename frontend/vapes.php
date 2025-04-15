@@ -1,3 +1,34 @@
+<?php
+  session_start();
+  if (isset($_GET["added"]) && $_GET["added"] === "success") {
+    echo "
+    <script>
+    window.addEventListener('DOMContentLoaded', () => {
+        Swal.fire({
+            title: 'Product Added!',
+            text: 'The product has been successfully added.',
+            icon: 'success',
+            confirmButtonText: 'Great!',
+            customClass: {
+                popup: 'rounded-lg shadow-lg'
+            }
+        });
+
+        // Correct the parameter name here
+        if (window.history.replaceState) {
+            const url = new URL(window.location.href);
+            url.searchParams.delete('added'); 
+            window.history.replaceState({}, document.title, url.toString());
+        }
+    });
+</script>
+";
+}
+
+
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +36,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>All Products - Vape Bliss</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 </head>
 <body class="bg-gray-50 text-gray-200">
@@ -15,7 +48,7 @@
       <a href="./index.php" class="text-2xl font-bold text-indigo-400">Vape Bliss</a>
       <div class="space-x-6">
       <?php 
-          session_start();
+          
           if (isset($_SESSION["username"]) && $_SESSION["username"] === "admin") {
             echo '<a
             href="./admin.php"

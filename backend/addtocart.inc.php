@@ -1,47 +1,52 @@
 <?php
 session_start();
-require_once 'dbh.inc.php'; // Include the database connection file
 
-// Check if user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header("Location: ../frontend/login.php?error=not_logged_in");
-    exit();
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $userId = $_SESSION['user_id']; // Get the user ID from the session
-    $productId = $_POST['product_id'];
-    $quantity = $_POST['quantity'];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $userId = $_SESSION['user_id'];  // Get the logged-in user's ID
+    $productId = $_POST["product_id"];  // Get the product ID
+    $quantity = $_POST["quantity"];  // Get the quantity to be added
 
     try {
-        // Check if the item already exists in the cart for the logged-in user
-        $checkSql = "SELECT * FROM cart_items WHERE user_id = ? AND product_id = ?";
-        $checkStmt = $pdo->prepare($checkSql);
-        $checkStmt->execute([$userId, $productId]);
-        $existingItem = $checkStmt->fetch(PDO::FETCH_ASSOC);
+        require_once("./dbh.inc.php");
 
-        if ($existingItem) {
-            // If the item already exists, update the quantity
-            $updateSql = "UPDATE cart_items SET quantity = quantity + ? WHERE user_id = ? AND product_id = ?";
-            $updateStmt = $pdo->prepare($updateSql);
-            $updateStmt->execute([$quantity, $userId, $productId]);
+        // Check if the user already has a cart
+        $cartQuery = "SELECT * FROM cart WHERE user_id = ?";
+        $cartStmt = $pdo->prepare($cartQuery);
+        $cartStmt->execute([$userId]);
+        $cart = $cartStmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($cart) {
+            // Cart found for the user, use the user_id as the cart_id
+            $cartId = $userId;  // The user_id acts as the cart_id in this case
+
+            // Check if the product already exists in the cart
+            $checkSql = "SELECT * FROM cart_items WHERE cart_id = ? AND product_id = ?";
+            $checkStmt = $pdo->prepare($checkSql);
+            $checkStmt->execute([$cartId, $productId]);
+            $existingItem = $checkStmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($existingItem) {
+                // Update the quantity if the item already exists in the cart
+                $updateSql = "UPDATE cart_items SET quantity = quantity + ? WHERE cart_id = ? AND product_id = ?";
+                $updateStmt = $pdo->prepare($updateSql);
+                $updateStmt->execute([$quantity, $cartId, $productId]);
+            } else {
+                // Insert the new item into the cart
+                $insertSql = "INSERT INTO cart_items (cart_id, product_id, quantity) VALUES (?, ?, ?)";
+                $insertStmt = $pdo->prepare($insertSql);
+                $insertStmt->execute([$cartId, $productId, $quantity]);
+            }
+
+            header("Location: ../frontend/vapes.php?added=success");
+            exit();
         } else {
-            // If the item does not exist, insert it into the cart
-            $insertSql = "INSERT INTO cart_items (user_id, product_id, quantity) VALUES (?, ?, ?)";
-            $insertStmt = $pdo->prepare($insertSql);
-            $insertStmt->execute([$userId, $productId, $quantity]);
+            echo "No cart found for the user.";
         }
 
-        // Redirect to the cart page with a success message
-        header("Location: ../frontend/cart.php?added=success");
-        exit();
     } catch (PDOException $e) {
-        // Handle any errors that occur
         die("Error adding to cart: " . $e->getMessage());
     }
 } else {
-    // Redirect if the request is not a POST
     header("Location: ../frontend/vape.php");
     exit();
 }
-?>

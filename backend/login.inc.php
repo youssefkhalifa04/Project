@@ -13,7 +13,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($result && password_verify($password, $result["password"])) {
             session_start();
             $_SESSION["username"] = $username;
-            echo "<script>alert('Login successful!\nHello " . $username . "');</script>";
+            $_SESSION["user_id"] = $result["id"]; // Store user_id in session
+           
             header("Location: ../frontend/index.php?login=success");
            
             exit();

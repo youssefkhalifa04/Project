@@ -12,8 +12,18 @@
   <body class="bg-gray-50">
     
   <?php
-    
     session_start();
+    require_once '../backend/dbh.inc.php'; // This gives you $pdo
+    
+    try {
+        $sql = "SELECT * FROM products";
+        $stmt = $pdo->prepare($sql); // use $pdo here
+        $stmt->execute();
+        $products = $stmt->fetchAll(PDO::FETCH_ASSOC); // PDO fetch
+    } catch (PDOException $e) {
+        die("Query failed: " . $e->getMessage());
+    }
+  
 
 if (isset($_GET["login"]) && $_GET["login"] === "success") {
     echo "
@@ -124,107 +134,31 @@ if (isset($_GET["signup"]) && $_GET["signup"] === "success") {
 
     <!-- Featured Vapes Section -->
     <section id="products" class="container mx-auto py-20 px-8">
-      <h2 class="text-4xl font-semibold text-center text-gray-800 mb-10">
-        Featured Vapes
-      </h2>
-      <div
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12"
-      >
-        <!-- Vape 1 -->
-        <div
-          class="bg-white rounded-xl shadow-lg overflow-hidden hover:scale-105 cursor-pointer transition-transform"
-        >
-          <img
-            src="./assets/vape1.jpg"
-            alt="Vape 1"
-            class="w-full h-64 object-cover"
-          />
-          <div class="p-6">
-            <h3 class="text-xl font-semibold text-gray-800">VaporWave</h3>
-            <p class="text-gray-500 mt-2">
-              A smooth, refreshing flavor that takes you to a new level of
-              relaxation.
-            </p>
-            <p class="mt-4 text-xl font-semibold text-gray-800">$14.99</p>
-            <a
-              href="#"
-              class="mt-4 inline-block bg-indigo-600 text-white py-2 px-6 rounded-full text-sm font-semibold hover:bg-indigo-500 transition-colors"
-              >Buy Now</a
-            >
-          </div>
-        </div>
+  <h2 class="text-4xl font-semibold text-center text-gray-800 mb-10">
+    Featured Vapes
+  </h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12">
+  <?php foreach ($products as $product): ?>
+  <div class="bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+    <img src="<?php echo htmlspecialchars($product['image']); ?>" alt="Vape" class="h-64 w-full object-cover">
+    <div class="p-5">
+      <h3 class="text-xl font-semibold text-white mb-1"><?php echo htmlspecialchars($product['name']); ?></h3>
+      <p class="text-gray-400 text-sm mb-3"><?php echo htmlspecialchars($product['description']); ?></p>
+      <p class="text-indigo-400 font-bold mb-3">$<?php echo htmlspecialchars($product['price']); ?></p>
+      <form action="../backend/addtocart.inc.php" method="POST">
+  <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
+  <input type="hidden" name="quantity" value="1">
+  <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-500 transition">
+    <a href="./vapes.php">Buy Now</a>
+  </button>
+</form>
 
-        <!-- Vape 2 -->
-        <div
-          class="bg-white rounded-xl shadow-lg overflow-hidden hover:scale-105 cursor-pointer transition-transform"
-        >
-          <img
-            src="./assets/vape2.jpg"
-            alt="Vape 2"
-            class="w-full h-64 object-cover"
-          />
-          <div class="p-6">
-            <h3 class="text-xl font-semibold text-gray-800">CloudNine</h3>
-            <p class="text-gray-500 mt-2">
-              A vibrant mix of tropical fruit flavors, perfect for a refreshing
-              escape.
-            </p>
-            <p class="mt-4 text-xl font-semibold text-gray-800">$15.49</p>
-            <a
-              href="#"
-              class="mt-4 inline-block bg-indigo-600 text-white py-2 px-6 rounded-full text-sm font-semibold hover:bg-indigo-500 transition-colors"
-              >Buy Now</a
-            >
-          </div>
-        </div>
+    </div>
+  </div>
+<?php endforeach; ?>
+  </div>
+</section>
 
-        <!-- Vape 3 -->
-        <div
-          class="bg-white rounded-xl shadow-lg overflow-hidden hover:scale-105 cursor-pointer transition-transform"
-        >
-          <img
-            src="./assets/vape3.jpg"
-            alt="Vape 3"
-            class="w-full h-64 object-cover"
-          />
-          <div class="p-6">
-            <h3 class="text-xl font-semibold text-gray-800">ZenPuff</h3>
-            <p class="text-gray-500 mt-2">
-              A relaxing, smooth experience with a hint of mint and green tea.
-            </p>
-            <p class="mt-4 text-xl font-semibold text-gray-800">$13.99</p>
-            <a
-              href="#"
-              class="mt-4 inline-block bg-indigo-600 text-white py-2 px-6 rounded-full text-sm font-semibold hover:bg-indigo-500 transition-colors"
-              >Buy Now</a
-            >
-          </div>
-        </div>
-
-        <!-- Vape 4 -->
-        <div
-          class="bg-white rounded-xl shadow-lg overflow-hidden hover:scale-105 cursor-pointer transition-transform"
-        >
-          <img
-            src="./assets/vape4.jpg"
-            alt="Vape 4"
-            class="w-full h-64 object-cover"
-          />
-          <div class="p-6">
-            <h3 class="text-xl font-semibold text-gray-800">MysticMist</h3>
-            <p class="text-gray-500 mt-2">
-              A mysterious and smooth vape with hints of berry and eucalyptus.
-            </p>
-            <p class="mt-4 text-xl font-semibold text-gray-800">$16.99</p>
-            <a
-              href="#"
-              class="mt-4 inline-block bg-indigo-600 text-white py-2 px-6 rounded-full text-sm font-semibold hover:bg-indigo-500 transition-colors"
-              >Buy Now</a
-            >
-          </div>
-        </div>
-      </div>
-    </section>
 
     <!-- Footer -->
     <footer
