@@ -77,9 +77,9 @@ if (isset($_GET["signup"]) && $_GET["signup"] === "success") {
         class="container mx-auto text-center h-screen bg-[url(./assets/bg.png)] bg-cover bg-center"
       >
         <nav
-          class="bg-transparent text-white p-6 shadow-lg h-16 flex items-center px-8 sticky top-0 left-0 right-0 px-8"
+          class="bg-transparent text-white p-6 shadow-lg h-16 flex items-center px-10 sticky top-0 left-0 right-0 px-8"
         >
-          <div class="container mx-auto flex justify-between items-center">
+          <div class="container mx-auto px-10 flex justify-between items-center">
             <a href="#" class="text-3xl font-extrabold">Vape Bliss</a>
             <div class="space-x-8">
             <?php 

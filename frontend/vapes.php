@@ -44,7 +44,7 @@
 
   <!-- Navbar -->
   <nav class="bg-gray-800 shadow-md p-4 sticky top-0 z-10">
-    <div class="container mx-auto flex justify-between items-center">
+    <div class="container mx-auto px-10 flex justify-between items-center">
       <a href="./index.php" class="text-2xl font-bold text-indigo-400">Vape Bliss</a>
       <div class="space-x-6">
       <?php 
@@ -57,20 +57,20 @@
           >';
         }
         ?>
-        <a href="./index.php" class="hover:text-indigo-300">Home</a>
-        <a href="./vapes.php" class="hover:text-indigo-300 font-semibold">Vapes</a>
+        <a href="./index.php" class="text-lg hover:text-indigo-300">Home</a>
+        <a href="./vapes.php" class="text-lg hover:text-indigo-300 font-semibold">Vapes</a>
         <?php 
           
           if (isset($_SESSION["username"])) {
-            echo '<a href="./cart.php" class="hover:text-indigo-300">Cart</a>';
+            echo '<a href="./cart.php" class="text-lg hover:text-indigo-300">Cart</a>';
           }
         ?>
         <?php
         
           if (isset($_SESSION["username"])) {
-            echo '<a href="../backend/logout.inc.php" class="hover:text-red-400">Logout</a>';
+            echo '<a href="../backend/logout.inc.php" class="text-lg hover:text-red-400">Logout</a>';
           } else {
-            echo '<a href="./login.php" class="hover:text-indigo-300">Login</a>';
+            echo '<a href="./login.php" class="text-lg hover:text-indigo-300">Login</a>';
           }
 
          

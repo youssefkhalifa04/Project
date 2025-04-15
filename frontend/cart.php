@@ -44,6 +44,9 @@ $total = 0;
 </head>
 <body class="bg-gray-900 text-white">
   <div class="container mx-auto px-4 py-8">
+  <a href="./index.php" class="fixed left-6 top-8 mb-6 bg-blue-600 px-4 py-2 rounded hover:bg-blue-500 transition">
+    ← Back to Home
+  </a>
     <h1 class="text-3xl font-bold mb-6 text-center">🛒 Your Cart</h1>
 
     <?php if (empty($cartItems)): ?>
@@ -65,9 +68,9 @@ $total = 0;
           </div>
           <div class="text-right">
             <p class="font-bold text-xl">$<?= number_format($itemTotal, 2) ?></p>
-            <form action="removefromcart.php" method="POST" class="mt-2">
+            <form action="../backend/removefromcart.inc.php" method="POST" class="mt-2">
               <input type="hidden" name="id" value="<?= $item['id'] ?>">
-              <button class="text-red-400 hover:text-red-200 text-sm">Remove</button>
+              <button type="submit"  class="text-red-400 hover:text-red-200 text-sm">Remove</button>
             </form>
           </div>
         </div>
