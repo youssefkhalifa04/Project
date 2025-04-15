@@ -36,21 +36,23 @@ if (isset($_GET["addproduct"]) && $_GET["addproduct"] === "success") {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Manage Products</title>
+  <title>Add Product</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="bg-gray-900 text-white">
-  <div class="min-h-screen flex">
-    <aside class="w-64 bg-gray-800 p-6">
+  <div class="min-h-screen flex ">
+    <aside class="w-64 bg-gray-800 p-6 hidden md:block fixed left-0 top-0 bottom-0">
       <h2 class="text-2xl font-bold mb-8">Admin Panel</h2>
       <nav class="space-y-4">
-        <a href="#addProduct" class="block text-gray-300 hover:text-white">Add Product</a>
-        <a href="#productList" class="block text-gray-300 hover:text-white">Manage Products</a>
+        <a href="#addProduct" class="block text-gray-300 hover:text-white  font-bold">Add Product</a>
+        <a href="./orders.php" class="block text-gray-300 hover:text-white ">orders</a>
+        <a href="./acceptedorders.php" class="block text-gray-300 hover:text-white ">Accepted Orders</a>
+        <a href="./doneSells.php" class="block text-gray-300 hover:text-white ">Done Sells</a>
       </nav>
     </aside>
 
-    <main class="flex-1 p-10">
+    <main class="flex-1 p-10 ml-64">
     
 
       <!-- Add Product -->

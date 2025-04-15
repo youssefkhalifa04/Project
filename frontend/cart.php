@@ -30,8 +30,12 @@ try {
 } catch (PDOException $e) {
     die("Query failed: " . $e->getMessage());
 }
+  $cartItemsName = array_column($cartItems, 'name');
+  $total = 0;
+  //var_dump($total);  // Check the total
+  //var_dump($cartItemsName);  // Check the array of article names
 
-$total = 0;
+
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +45,31 @@ $total = 0;
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Shopping Cart</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
+<script>
+  const form = document.getElementById('checkoutForm');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault(); // Stop normal submission
+
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "Do you want to place this order?",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#2563eb',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, checkout!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Submit the form after confirmation
+        form.submit();
+      }
+    });
+  });
+</script>
 <body class="bg-gray-900 text-white">
   <div class="container mx-auto px-4 py-8">
   <a href="./index.php" class="fixed left-6 top-8 mb-6 bg-blue-600 px-4 py-2 rounded hover:bg-blue-500 transition">
@@ -70,17 +98,31 @@ $total = 0;
             <p class="font-bold text-xl">$<?= number_format($itemTotal, 2) ?></p>
             <form action="../backend/removefromcart.inc.php" method="POST" class="mt-2">
               <input type="hidden" name="id" value="<?= $item['id'] ?>">
-              <button type="submit"  class="text-red-400 hover:text-red-200 text-sm">Remove</button>
+              <div class="flex gap-2">
+              <button type="submit"  class="text-red-500 hover:text-white hover:bg-red-500 text-sm border border-red-400 px-2 py-1 rounded">Remove</button>
+              
+              </div>
             </form>
           </div>
         </div>
         <?php endforeach; ?>
       </div>
 
-      <div class="mt-8 bg-gray-800 p-6 rounded-lg shadow-md text-right">
-        <p class="text-xl font-semibold">Total: $<?= number_format($total, 2) ?></p>
-        <a href="checkout.php" class="mt-4 inline-block bg-green-600 text-white px-6 py-2 rounded hover:bg-green-500 transition">Proceed to Checkout</a>
-      </div>
+      <form action="../backend/makeorder.inc.php" method="POST" id="checkoutForm">
+  <div class="mt-8 bg-gray-800 p-6 rounded-lg shadow-md text-right">
+    <p class="text-sm text-gray-400">Shipping fees : $8</p>
+    <p class="text-xl font-semibold">Total: $<?= number_format($total + 8, 2) ?></p>
+
+    <input type="hidden" name="total" value="<?= $total ?>">
+    <input type="hidden" name="articles" value="<?= htmlspecialchars(implode(", ", $cartItemsName)) ?>">
+
+    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded mt-4 hover:bg-blue-500 transition" onclick="alert('Order Placed')">
+      Checkout
+    </button>
+  </div>
+</form>
+
+
     <?php endif; ?>
   </div>
 </body>
