@@ -1,0 +1,3 @@
+
+MySQL DB Name	MySQL User Name	MySQL Password	MySQL Host Name	PHPMyAdmin
+if0_38758925_ecommerce	if0_38758925	(Your vPanel Password)	sql200.infinityfree.com	

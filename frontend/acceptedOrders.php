@@ -22,17 +22,43 @@ try {
 <body class="bg-gray-900 text-white">
   <div class="min-h-screen flex">
     <aside class="w-64 bg-gray-800 p-6 hidden md:block fixed left-0 top-0 bottom-0">
-      <h2 class="text-2xl font-bold mb-8">Admin Panel</h2>
+      <h2 class="text-2xl font-bold mb-8 mt-10">Admin Panel</h2>
       <nav class="space-y-4">
-        <a href="./admin.php" class="block text-gray-300 hover:text-white">Add Product</a>
+        <a href="./admin.php" class="block text-gray-300 hover:text-white">Products</a>
         <a href="./orders.php" class="block text-gray-300 hover:text-white">Orders</a>
-        <a href="./acceptedorders.php" class="block text-gray-300 hover:text-white font-bold">Accepted Orders</a>
-        <a href="./donesells.php" class="block text-gray-300 hover:text-white">Done Sells</a>
+        <a href="./acceptedorders.php" class="block text-gray-300 hover:text-white font-bold">In Progress..</a>
+        <a href="./donesells.php" class="block text-gray-300 hover:text-white">Done</a>
       </nav>
     </aside>
 
-    <main class="flex-1 p-8 ml-64">
-      <h2 class="text-2xl font-bold mb-4">🚚 Accepted Orders (In Progress)</h2>
+    <main class="flex-1 p-8 md:ml-64">
+    <!-- Top mobile bar -->
+      <div class="fixed md:hidden left-0 right-0 top-0 h-10 bg-gray-900 py-4">
+        <div class="fixed right-4 top-2">
+          <button id="menu-btn2" class="text-white focus:outline-none">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+              viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Back Button -->
+      <a href="../index.php" class="fixed top-2 left-4 hover:text-red-800">
+        Back
+      </a>
+
+      <!-- Mobile Nav -->
+      <nav class="bg-gray-900 shadow-md sticky top-10 z-50">
+        <div id="mobile-menu2" class="hidden flex items-center justify-around md:hidden px-4 pb-4">
+          <a href="./admin.php" class="block py-2 text-white hover:text-blue-600">Products</a>
+          <a href="./orders.php" class="block py-2 text-white hover:text-blue-600">Orders</a> 
+          <a href="./acceptedorders.php" class="block py-2 text-white hover:text-blue-600">In Progress ...</a>
+          <a href="./donesells.php" class="block py-2 text-white hover:text-blue-600">Done</a>
+        </div>
+      </nav>
+      <h2 class="text-2xl font-bold mb-4 mt-6">🚚 Accepted Orders (In Progress)</h2>
       <div class="space-y-4">
         <?php if (empty($acceptedOrders)): ?>
           <p class="text-gray-400">No accepted orders yet.</p>
@@ -58,5 +84,11 @@ try {
       </div>
     </main>
   </div>
+  <script>
+    document.getElementById('menu-btn2').addEventListener('click', () => {
+      const menu = document.getElementById('mobile-menu2');
+      menu.classList.toggle('hidden');
+    });
+  </script>
 </body>
 </html>

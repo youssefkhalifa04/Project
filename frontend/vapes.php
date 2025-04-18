@@ -1,33 +1,30 @@
 <?php
-  session_start();
-  if (isset($_GET["added"]) && $_GET["added"] === "success") {
-    echo "
-    <script>
+session_start();
+
+if (isset($_GET["added"]) && $_GET["added"] === "success") {
+  echo "
+  <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+  <script>
     window.addEventListener('DOMContentLoaded', () => {
-        Swal.fire({
-            title: 'Product Added!',
-            text: 'The product has been successfully added.',
-            icon: 'success',
-            confirmButtonText: 'Great!',
-            customClass: {
-                popup: 'rounded-lg shadow-lg'
-            }
-        });
-
-        // Correct the parameter name here
-        if (window.history.replaceState) {
-            const url = new URL(window.location.href);
-            url.searchParams.delete('added'); 
-            window.history.replaceState({}, document.title, url.toString());
+      Swal.fire({
+        title: 'Product Added!',
+        text: 'The product has been successfully added.',
+        icon: 'success',
+        confirmButtonText: 'Great!',
+        customClass: {
+          popup: 'rounded-lg shadow-lg'
         }
+      });
+
+      if (window.history.replaceState) {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('added'); 
+        window.history.replaceState({}, document.title, url.toString());
+      }
     });
-</script>
-";
+  </script>
+  ";
 }
-
-
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,60 +33,85 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>All Products - Vape Bliss</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-
 </head>
 <body class="bg-gray-50 text-gray-200">
 
   <!-- Navbar -->
-  <nav class="bg-gray-800 shadow-md p-4 sticky top-0 z-10">
-    <div class="container mx-auto px-10 flex justify-between items-center">
-      <a href="./index.php" class="text-2xl font-bold text-indigo-400">Vape Bliss</a>
-      <div class="space-x-6">
-      <?php 
-          
-          if (isset($_SESSION["username"]) && $_SESSION["username"] === "admin") {
-            echo '<a
-            href="./admin.php"
-            class="text-lg hover:text-indigo-200 transition-colors"
-            >Admin</a
-          >';
-        }
-        ?>
-        <a href="./index.php" class="text-lg hover:text-indigo-300">Home</a>
-        <a href="./vapes.php" class="text-lg hover:text-indigo-300 font-semibold">Vapes</a>
+  <nav class="bg-gray-900 shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
+      <div class="text-2xl font-bold text-white">Vape Store</div>
+
+      <!-- Desktop Menu -->
+      <div class="hidden md:flex space-x-6 text-gray-700 font-medium">
         <?php 
-          
-          if (isset($_SESSION["username"])) {
-            echo '<a href="./cart.php" class="text-lg hover:text-indigo-300">Cart</a>';
+          if (isset($_SESSION["username"]) && $_SESSION["username"] == "admin") {
+            echo '<a href="./frontend/admin.php" class="text-white hover:text-blue-600 transition">Admin</a>';
+          }
+        ?>
+        <a href="./index.php" class="text-white hover:text-blue-600 transition">Home</a>
+        <a href="./frontend/vapes.php" class="text-white hover:text-blue-600 transition">Store</a>
+        <?php 
+          if (isset($_SESSION["username"]) && $_SESSION["username"] !== "admin") {
+            echo '<a href="./frontend/cart.php" class="text-white hover:text-blue-600 transition">Cart</a>';
           }
         ?>
         <?php
-        
-          if (isset($_SESSION["username"])) {
-            echo '<a href="../backend/logout.inc.php" class="text-lg hover:text-red-400">Logout</a>';
+          if (isset($_SESSION["username"]) && !empty($_SESSION["username"])) {
+            echo '<a href="../index.php" class="text-white hover:text-blue-600 transition">Logout</a>';
           } else {
-            echo '<a href="./login.php" class="text-lg hover:text-indigo-300">Login</a>';
+            echo '<a href="./frontend/login.php" class="text-white hover:text-blue-600 transition">Login</a>';
           }
-
-         
-         
-          require_once '../backend/dbh.inc.php'; // This gives you $pdo
-
-          try {
-              $sql = "SELECT * FROM products";
-              $stmt = $pdo->prepare($sql); // use $pdo here
-              $stmt->execute();
-              $products = $stmt->fetchAll(PDO::FETCH_ASSOC); // PDO fetch
-          } catch (PDOException $e) {
-              die("Query failed: " . $e->getMessage());
-          }
-
         ?>
       </div>
+
+      <!-- Mobile Hamburger -->
+      <div class="md:hidden">
+        <button id="menu-btn6" class="text-white focus:outline-none">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu6" class="md:hidden hidden flex flex-col justify-center px-4 pb-4">
+      <center>
+        <?php 
+        if (isset($_SESSION["username"]) && $_SESSION["username"] == "admin") {
+          echo '<a href="./admin.php" class="block py-2 text-white hover:text-blue-600">Admin</a>';
+        }
+      ?>
+      <a href="../index.php" class="block py-2 text-white hover:text-blue-600">Home</a>
+      <a href="./vapes.php" class="block py-2 text-white hover:text-blue-600">Store</a>
+      <?php 
+        if (isset($_SESSION["username"]) && $_SESSION["username"] !== "admin") {
+          echo '<a href="./cart.php" class="block py-2 text-white hover:text-blue-600">Cart</a>';
+        }
+      ?>
+      <?php
+        if (isset($_SESSION["username"]) && !empty($_SESSION["username"])) {
+          echo '<a href="../index.php" class="block py-2 text-white hover:text-blue-600">Logout</a>';
+        } else {
+          echo '<a href="./login.php" class="block py-2 text-white hover:text-blue-600">Login</a>';
+        }
+      ?>
+      </center>
     </div>
   </nav>
+
+  <?php
+    require_once '../backend/dbh.inc.php';
+
+    try {
+      $stmt = $pdo->prepare("SELECT * FROM products");
+      $stmt->execute();
+      $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+      die("Query failed: " . $e->getMessage());
+    }
+  ?>
 
   <!-- Page Header -->
   <header class="bg-gradient-to-r from-gray-800 to-gray-700 py-16 text-center">
@@ -100,28 +122,29 @@
   <!-- Products Grid -->
   <main class="container mx-auto px-4 py-12">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
-      
-      <!-- Sample Product Card -->
       <?php foreach ($products as $product): ?>
-  <div class="bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-    <img src="<?php echo htmlspecialchars($product['image']); ?>" alt="Vape" class="h-64 w-full object-cover">
-    <div class="p-5">
-      <h3 class="text-xl font-semibold text-white mb-1"><?php echo htmlspecialchars($product['name']); ?></h3>
-      <p class="text-gray-400 text-sm mb-3"><?php echo htmlspecialchars($product['description']); ?></p>
-      <p class="text-indigo-400 font-bold mb-3">$<?php echo htmlspecialchars($product['price']); ?></p>
-      <form action="../backend/addtocart.inc.php" method="POST">
-  <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
-  <input type="hidden" name="quantity" value="1">
-  <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-500 transition">
-    Buy Now
-  </button>
-</form>
-
-    </div>
-  </div>
-<?php endforeach; ?>
-
-
+        <div class="bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+          <img src="<?= htmlspecialchars($product['image']) ?>" alt="Vape" class="h-64 w-full object-cover">
+          <div class="p-5">
+            <h3 class="text-xl font-semibold text-white mb-1"><?= htmlspecialchars($product['name']) ?></h3>
+            <p class="text-gray-400 text-sm mb-3"><?= htmlspecialchars($product['description']) ?></p>
+            <p class="text-indigo-400 font-bold mb-3">$<?= htmlspecialchars($product['price']) ?></p>
+            <form action="../backend/addtocart.inc.php" method="POST">
+              <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
+              <input type="hidden" name="quantity" value="1">
+              <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-500 transition">
+                Buy Now
+              </button>
+              
+            </form>
+            <form action="../backend/details.inc.php" method="POST">
+              <button type="submit" name="product_id" value="<?= $product['id'] ?>" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-500 transition">
+                  Details
+              </button>
+            </form>
+          </div>
+        </div>
+      <?php endforeach; ?>
     </div>
   </main>
 
@@ -132,5 +155,12 @@
     </div>
   </footer>
 
+  <!-- Toggle Mobile Menu Script -->
+  <script>
+    document.getElementById('menu-btn6').addEventListener('click', () => {
+      const menu = document.getElementById('mobile-menu6');
+      menu.classList.toggle('hidden');
+    });
+  </script>
 </body>
 </html>

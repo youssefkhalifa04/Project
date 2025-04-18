@@ -31,6 +31,9 @@ if (isset($_GET["addproduct"]) && $_GET["addproduct"] === "success") {
 }
 ?>
 
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,26 +44,77 @@ if (isset($_GET["addproduct"]) && $_GET["addproduct"] === "success") {
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="bg-gray-900 text-white">
-  <div class="min-h-screen flex ">
+  <div class=" flex ">
     <aside class="w-64 bg-gray-800 p-6 hidden md:block fixed left-0 top-0 bottom-0">
-      <h2 class="text-2xl font-bold mb-8">Admin Panel</h2>
+      <h2 class="text-2xl font-bold mb-8 mt-10">Admin Panel</h2>
       <nav class="space-y-4">
-        <a href="#addProduct" class="block text-gray-300 hover:text-white  font-bold">Add Product</a>
+        <a href="#addProduct" class="block text-gray-300 hover:text-white  font-bold">Products</a>
         <a href="./orders.php" class="block text-gray-300 hover:text-white ">orders</a>
-        <a href="./acceptedorders.php" class="block text-gray-300 hover:text-white ">Accepted Orders</a>
-        <a href="./doneSells.php" class="block text-gray-300 hover:text-white ">Done Sells</a>
+        <a href="./acceptedorders.php" class="block text-gray-300 hover:text-white ">In Progress..</a>
+        <a href="./donesells.php" class="block text-gray-300 hover:text-white ">Done</a>
+        
       </nav>
     </aside>
-
-    <main class="flex-1 p-10 ml-64">
     
 
+<div class="fixed md:hidden left-0 right-0 top-0 h-10 bg-gray-900 py-4">
+    <div class="md:hidden fixed right-4 top-2  ">
+              <button id="menu-btn1" class="text-white focus:outline-none ">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+                  viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+              </button>
+            </div>
+    </div>
+        <a href="../index.php" class=" fixed top-2  left-4 mb-10  hover:text-red-800 ">
+      Back
+    </a>
+</div>
+
+   
+
+
+   <nav class="bg-gray-900  shadow-md sticky top-10 z-50">
+          <!-- Mobile Menu -->
+          <div id="mobile-menu1" class="flex itmes-center justify-around md:hidden  px-4 pb-4">     <a href="./admin.php" class="block py-2 text-white hover:text-blue-600">Products</a>
+            <a href="./orders.php" class="block py-2 text-white hover:text-blue-600">Orders</a> 
+            <a href="./acceptedorders.php" class="block py-2 text-white hover:text-blue-600">In Progress ...</a>
+            <a href="./donesells.php" class="block py-2 text-white hover:text-blue-600">Done</a>
+                
+          </div>
+    </nav>
+
+
+
+
+
+
+    <main class="flex-1 p-10 md:ml-64">
+    
+    
       <!-- Add Product -->
-      <section id="addProduct" class="mb-12">
-      <a href="./index.php" class="inline-block mb-6 bg-blue-600 px-4 py-2 rounded hover:bg-blue-500">
+      <section id="addProduct" class="mb-12 pt-4">
+      <a href="../index.php" class="hidden md-flex inline-block mb-6 bg-blue-600 px-4 py-2 rounded hover:bg-blue-500">
       ← Back
     </a>
-        <h3 class="text-xl font-semibold mb-4">Add New Product</h3>
+  
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+        <h3 class="text-xl font-semibold mb-4 mt-2">Add New Product</h3>
         <form action="../backend/addproduct.inc.php" method="POST" enctype="multipart/form-data" class="bg-gray-800 p-6 rounded-lg shadow-md space-y-4">
           <input type="text" name="name" placeholder="Product Name" required class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded" />
           <input type="number" name="price" placeholder="Price" step="0.01" required class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded" />
@@ -70,7 +124,7 @@ if (isset($_GET["addproduct"]) && $_GET["addproduct"] === "success") {
           <div id="imagePreview" class="mt-4">
             <img id="preview" src="" class="max-h-48 rounded border border-gray-600 hidden" />
           </div>
-          <button type="submit" class="bg-indigo-600 px-4 py-2 rounded hover:bg-indigo-500">Add Product</button>
+          <button type="submit" class="bg-indigo-600 px-4 py-2 rounded hover:bg-indigo-500">Products</button>
         </form>
       </section>
 
@@ -138,5 +192,15 @@ if (isset($_GET["addproduct"]) && $_GET["addproduct"] === "success") {
       });
     });
   </script>
+  <script>
+      document.getElementById('menu-btn1').addEventListener('click', () => {
+        const menu = document.getElementById('mobile-menu1');
+        if (menu.classList.contains('hidden')) {
+          menu.classList.remove('hidden');
+        } else {
+          menu.classList.add('hidden');
+        }
+      });
+    </script>
 </body>
 </html>
